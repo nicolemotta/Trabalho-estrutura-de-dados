@@ -1,5 +1,3 @@
-#python3 trie.py
-
 class NoTrie:
     def __init__(self):
         self.filhos = {}
