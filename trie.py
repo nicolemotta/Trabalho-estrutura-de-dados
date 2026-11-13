@@ -141,50 +141,53 @@ class Trie: # Representa a árvore Trie.
         if no.eh_fim_de_palavra:
             palavras.append((prefixo, no.frequencia)) #adiciona a palavra e sua frequência (quantas vezes a palavra foi consultada) na lista
 
-        #Percorre recursivamente os filhos para encontrar outras palavras
+        #percorre os filhos para encontrar mais palavras
         for letra, filho in no.filhos.items():
             palavras.extend(
                 self.coletar_palavras(filho, prefixo + letra)
-            )
+            ) #adiciona na lista as palavras encontradas nos nós filhos
 
-        return palavras
+        return palavras #retorna a lista de palavras e suas frequências
+
 
     def autocompletar(self, prefixo):
-        prefixo = prefixo.strip().lower()
+        prefixo = prefixo.strip().lower() #converte o prefixo para letras minúsculas (padronizar a busca), e também remove os espaços em branco
 
         if not prefixo:
-            return []
+            return [] #se o prefixo estiver vazio, retorna uma lista vazia.
 
-        no = self.buscar_prefixo(prefixo)
+        no = self.buscar_prefixo(prefixo) #Busca o nó que corresponde o prefixo digitado
 
         if no is None:
-            return []
+            return [] #caso o prefixo não existir na árvore, vai retornar uma lista vazia
 
-        palavras = self.coletar_palavras(no, prefixo)
-        palavras.sort(key=lambda item: (-item[1], item[0]))
+        palavras = self.coletar_palavras(no, prefixo) #coleta todas as palavras que começam com o prefixo
+        palavras.sort(key=lambda item: (-item[1], item[0])) #ordena por frequência decrescente (se der empate, é por ordem alfabética)
 
-        return [palavra for palavra, freq in palavras[:3]]
+        return [palavra for palavra, freq in palavras[:3]] #retorna apenas as três primeiras sugestões
 
-    
+
+# Funções de interação com o usuário (fora da classe Trie)
 
 def consultar_palavra(trie):
-    palavra = input("Digite uma palavra: ").strip().lower()
+    palavra = input("Digite uma palavra: ").strip().lower() #pede uma palavra e padroniza a entrada (letra minuscula, sem espaço em branco)
 
     if not palavra:
         print("Digite uma palavra válida.")
-        return
+        return #se a palavra estiver vazia, vai encerrar a consulta 
 
-    atual = trie.buscar_prefixo(palavra)
+    atual = trie.buscar_prefixo(palavra) #vai buscar o nó que corresponde a palavra digitada
 
     if atual is not None and atual.eh_fim_de_palavra:
-        trie.incrementar_frequencia(palavra)
+        trie.incrementar_frequencia(palavra)  #Soma 1 a frequência da palavra, caso ela exista
         print("Palavra encontrada no dicionário!")
     else:
-        trie.inserir(palavra)
+        trie.inserir(palavra) # se a palavra não existir, vai inserir ela automaticamente
         print("Palavra não encontrada. Nova palavra aprendida!")
 
 
 def menu():
+    #cria o menu com as opções pro usuario escolher
     print("\n===== MENU TRIE =====")
     print("1 - Consultar palavra")
     print("2 - Autocompletar por prefixo")
@@ -192,35 +195,35 @@ def menu():
     print("4 - Remover palavra")
     print("0 - Sair")
 
-    return input("Escolha uma opção: ")
+    return input("Escolha uma opção: ") #retorna a opção escolhida pelo usuário
 
 
 def main():
-    trie = Trie()
-    trie.carregar_dicionario()
+    trie = Trie() #Cria uma nova árvore Trie
+    trie.carregar_dicionario() #carrega as palavras do arquivo de dicionário para a árvore
 
     try:
-        while True:
-            opcao = menu()
+        while True: #Mantém o programa em execução até o usuário escolher sair
+            opcao = menu() # Exibe o menu e recebe a opção escolhida.
 
             if opcao == "1":
-                consultar_palavra(trie)
+                consultar_palavra(trie) #Consulta uma palavra e atualiza sua frequência ou aprende uma nova
 
             elif opcao == "2":
                 prefixo = input("Digite um prefixo: ")
-                sugestoes = trie.autocompletar(prefixo)
+                sugestoes = trie.autocompletar(prefixo) #busca até três sugestões para o prefixo que foi informado
 
                 if sugestoes:
                     print("Sugestões:")
                     for palavra in sugestoes:
-                        print("-", palavra)
+                        print("-", palavra) #Exibe cada palavra sugerida
                 else:
-                    print("Nenhuma sugestão encontrada.")
+                    print("Nenhuma sugestão encontrada.") # vai informar quando não existem palavras com o prefixo
 
             elif opcao == "3":
                 palavra = input("Palavra para inserir: ")
                 if palavra.strip():
-                    trie.inserir(palavra)
+                    trie.inserir(palavra) #insere a palavra informada na árvore
                     print("Palavra inserida!")
                 else:
                     print("Digite uma palavra válida.")
@@ -228,26 +231,24 @@ def main():
             elif opcao == "4":
                 palavra = input("Palavra para remover: ")
                 if palavra.strip():
-                    trie.remover(palavra)
+                    trie.remover(palavra) #remove a palavra da árvore, caso ela exista
                     print("Operação de remoção concluída.")
                 else:
                     print("Digite uma palavra válida.")
 
             elif opcao == "0":
                 print("Encerrando programa...")
-                break
+                break #encerra o laço de repetição e finaliza o programa
 
             else:
-                print("Opção inválida!")
+                print("Opção inválida!") #vai informar quando a opção digitada não existe no menu
 
     finally:
-        trie.salvar_dicionario()
+        trie.salvar_dicionario() #salva as palavras e suas frequências no arquivo antes de encerrar.
         print("Dicionário salvo!")
 
-
 if __name__ == "__main__":
-    main()
-
+    main() # Inicia o programa quando o arquivo é executado diretamente
 
 
 
