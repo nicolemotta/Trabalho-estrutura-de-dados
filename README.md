@@ -19,3 +19,6 @@ coletar_palavras(no, prefixo)
 consultar_palavra()	
 menu()
 main()
+
+Link documentação:
+https://docs.google.com/document/d/1iVfrcGeeip7Qx7zNKtI4RWizS-YvbXDMPKKic2acag8/edit?usp=sharing
