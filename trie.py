@@ -1,30 +1,32 @@
-class NoTrie:
+#Nicole 
+class NoTrie: # Nó da árvore Trie.
     def __init__(self):
-        self.filhos = {}
-        self.eh_fim_de_palavra = False
-        self.frequencia = 0
+        self.filhos = {} # Armazena os filhos do nó, usando cada letra como chave.
+        self.eh_fim_de_palavra = False # Indica se o nó representa o final de uma palavra.
+        self.frequencia = 0 # Quantidade de vezes que a palavra foi consultada.
 
-class Trie:
+class Trie: # Representa a árvore Trie.
     def __init__(self):
-        self.raiz = NoTrie()
+        self.raiz = NoTrie() # Nó raiz da árvore Trie.
 
 
 
     def inserir(self, palavra):
-        palavra = palavra.strip().lower()
+        palavra = palavra.strip().lower() # Converte a palavra para minúsculas e remove espaços em branco.
 
         if not palavra:
-            return
+            return # Se a palavra estiver vazia, não faz nada.
 
-        atual = self.raiz
+        atual = self.raiz # Nó atual começa na raiz da árvore.
 
-        for letra in palavra:
+        # Percorre cada letra da palavra e cria nós filhos conforme necessário.
+        for letra in palavra: 
             if letra not in atual.filhos:
                 atual.filhos[letra] = NoTrie()
 
             atual = atual.filhos[letra]
 
-        atual.eh_fim_de_palavra = True
+        atual.eh_fim_de_palavra = True # Marca o nó atual como o final de uma palavra.
 
 
 
@@ -32,6 +34,7 @@ class Trie:
         palavra = palavra.lower()
 
         def _remover(no, palavra, indice):
+            #  Verifica se chegou ao final da palavra.
             if indice == len(palavra):
                 if not no.eh_fim_de_palavra:
                     return False
@@ -39,51 +42,51 @@ class Trie:
                 no.eh_fim_de_palavra = False
                 no.frequencia = 0
 
-                return len(no.filhos) == 0
+                return len(no.filhos) == 0 # Retorna True se o nó não tiver filhos, indicando que pode ser removido.
 
-            letra = palavra[indice]
+            letra = palavra[indice] # Obtém a letra atual da palavra.
 
             if letra not in no.filhos:
-                return False
+                return False # Se a letra não existir, a palavra não está na árvore, então retorna False.
 
             deve_remover = _remover(
                 no.filhos[letra], palavra, indice + 1
-            )
+            ) # Continua a remoção recursivamente para o próximo nó.
 
             if deve_remover:
-                del no.filhos[letra]
+                del no.filhos[letra] # Remove o nó quando ele não é mais necessário.
 
             return (
                 not no.eh_fim_de_palavra
                 and len(no.filhos) == 0
-            )
+            ) # Verifica se o nó atual pode ser removido, retornando True se não for o final de uma palavra e não tiver filhos.
 
-        _remover(self.raiz, palavra, 0)
+        _remover(self.raiz, palavra, 0) 
 
     
     def carregar_dicionario(self):
         try:
             with open("dicionario.txt", "r", encoding="utf-8") as arquivo:
                 for linha in arquivo:
-                    dados = linha.strip().split(";")
+                    dados = linha.strip().split(";") # Divide a linha em palavra e frequência usando o ponto e vírgula como separador.
 
                     if not dados[0]:
-                        continue
+                        continue # Se a palavra estiver vazia, ignora a linha.
 
                     palavra = dados[0]
-                    frequencia = int(dados[1]) if len(dados) > 1 and dados[1].isdigit() else 0
+                    frequencia = int(dados[1]) if len(dados) > 1 and dados[1].isdigit() else 0 # Se a frequência não for fornecida ou não for um número, define como 0.
 
-                    self.inserir(palavra)
+                    self.inserir(palavra) # Insere a palavra na árvore Trie.
 
-                    atual = self.raiz
+                    atual = self.raiz # Nó atual começa na raiz da árvore.
 
                     for letra in palavra.lower():
-                        atual = atual.filhos[letra]
+                        atual = atual.filhos[letra] # Percorre cada letra da palavra para chegar ao nó correspondente.
 
-                    atual.frequencia = frequencia
+                    atual.frequencia = frequencia # Atribui a frequência à palavra.
 
         except FileNotFoundError:
-            print("Arquivo de dicionário não encontrado.")
+            print("Arquivo de dicionário não encontrado.") # Se o arquivo não for encontrado, exibe uma mensagem de aviso.
 
 
 
@@ -93,32 +96,32 @@ class Trie:
 
         for letra in palavra:
             if letra not in atual.filhos:
-                return
+                return # Se a letra não existir, a palavra não está na árvore, então retorna.
 
-            atual = atual.filhos[letra]
+            atual = atual.filhos[letra] 
 
         if atual.eh_fim_de_palavra:
-            atual.frequencia += 1
+            atual.frequencia += 1 # Incrementa somente se o nó atual for o final de uma palavra.
 
 
     def salvar_dicionario(self):
         palavras = []
 
-        def percorrer(no, palavra):
+        def percorrer(no, palavra): 
             if no.eh_fim_de_palavra:
-                palavras.append(palavra + ";" + str(no.frequencia))
+                palavras.append(palavra + ";" + str(no.frequencia)) # Adiciona a palavra e sua frequência à lista de palavras.
 
             for letra, filho in no.filhos.items():
-                percorrer(filho, palavra + letra)
+                percorrer(filho, palavra + letra) # Percorre recursivamente os nós filhos.
 
-        percorrer(self.raiz, "")
+        percorrer(self.raiz, "") # Inicia a travessia a partir da raiz da árvore.
 
         with open("dicionario.txt", "w", encoding="utf-8") as arquivo:
             for palavra in palavras:
-                arquivo.write(palavra + "\n")
+                arquivo.write(palavra + "\n") # Escreve cada palavra e sua frequência no arquivo, separadas por uma nova linha.
 
 
-    
+#Vinicius
     def buscar_prefixo(self, prefixo):
         prefixo = prefixo.strip().lower()
         atual = self.raiz
