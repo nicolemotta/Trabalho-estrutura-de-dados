@@ -123,23 +123,25 @@ class Trie: # Representa a árvore Trie.
 
 #Vinicius
     def buscar_prefixo(self, prefixo):
-        prefixo = prefixo.strip().lower()
-        atual = self.raiz
+        prefixo = prefixo.strip().lower() #Converte o prefixo para letras minúsculas (padronizar a busca), e também remove os espaços em branco
+        atual = self.raiz #Nó atual vai começar na raiz da árvore
 
+        #loop para percorrer cada letra do prefixo para encontrar o nó correspondente
         for letra in prefixo:
             if letra not in atual.filhos:
-                return None
+                return None #Se caso a letra não existir, o prefixo não está na árvore, aí retorna
 
-            atual = atual.filhos[letra]
+            atual = atual.filhos[letra] #vai para o próximo nó da árvore
 
-        return atual
+        return atual #Retorna o nó correspondente ao final do prefixo
 
     def coletar_palavras(self, no, prefixo):
-        palavras = []
+        palavras = [] #lista que vai armazenar as palavras encontradas 
 
         if no.eh_fim_de_palavra:
-            palavras.append((prefixo, no.frequencia))
+            palavras.append((prefixo, no.frequencia)) #adiciona a palavra e sua frequência (quantas vezes a palavra foi consultada) na lista
 
+        #Percorre recursivamente os filhos para encontrar outras palavras
         for letra, filho in no.filhos.items():
             palavras.extend(
                 self.coletar_palavras(filho, prefixo + letra)
