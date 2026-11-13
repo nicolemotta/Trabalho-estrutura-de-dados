@@ -2,7 +2,7 @@
 TRABALHO PRÁTICO ESTRUTURA DE DADOS: AUTOCOMPLETAR COM TRIE CLÁSSICA
 
 Nicole
-Métodos
+Métodos: 
 NoTrie.__init__()	
 Trie.__init__()	
 inserir(palavra)
@@ -12,7 +12,7 @@ incrementar_frequencia(palavra)
 salvar_dicionario()
 
 Vinicius
-Métodos
+Métodos: 
 buscar_prefixo(prefixo)
 autocompletar(prefixo)	
 coletar_palavras(no, prefixo)
