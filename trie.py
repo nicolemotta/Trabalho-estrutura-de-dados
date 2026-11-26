@@ -1,4 +1,3 @@
-#Nicole 
 class NoTrie: # Nó da árvore Trie.
     def __init__(self):
         self.filhos = {} # Armazena os filhos do nó, usando cada letra como chave.
@@ -121,7 +120,6 @@ class Trie: # Representa a árvore Trie.
                 arquivo.write(palavra + "\n") # Escreve cada palavra e sua frequência no arquivo, separadas por uma nova linha.
 
 
-#Vinicius
     def buscar_prefixo(self, prefixo):
         prefixo = prefixo.strip().lower() #Converte o prefixo para letras minúsculas (padronizar a busca), e também remove os espaços em branco
         atual = self.raiz #Nó atual vai começar na raiz da árvore
